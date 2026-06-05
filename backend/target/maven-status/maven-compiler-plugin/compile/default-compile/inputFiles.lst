@@ -1,0 +1,17 @@
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\exception\ResourceNotFoundException.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\exception\GlobalExceptionHandler.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\user\enums\Role.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\auth\dto\LoginRequest.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\auth\service\AuthServiceImpl.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\security\SecurityConfig.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\AiContentStudioApplication.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\auth\service\AuthService.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\security\JwtAuthenticationFilter.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\user\entity\User.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\config\CorsConfig.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\auth\controller\AuthController.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\auth\dto\RegisterRequest.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\security\CustomUserDetailsService.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\auth\repository\UserRepository.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\auth\dto\AuthResponse.java
+C:\Users\Mathivadhana\Downloads\ai-content-studio\ai-content-studio\backend\src\main\java\com\aicontentstudio\security\JwtService.java
