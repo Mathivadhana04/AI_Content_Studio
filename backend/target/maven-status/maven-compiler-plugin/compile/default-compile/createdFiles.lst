@@ -7,13 +7,18 @@ com\aicontentstudio\exception\GlobalExceptionHandler$ValidationErrorResponse.cla
 com\aicontentstudio\auth\repository\UserRepository.class
 com\aicontentstudio\exception\GlobalExceptionHandler$ValidationErrorResponse$ValidationErrorResponseBuilder.class
 com\aicontentstudio\auth\service\AuthServiceImpl.class
+com\aicontentstudio\workspace\repository\WorkspaceRepository.class
 com\aicontentstudio\auth\controller\AuthController.class
 com\aicontentstudio\auth\service\AuthService.class
 com\aicontentstudio\exception\ResourceNotFoundException.class
 com\aicontentstudio\AiContentStudioApplication.class
 com\aicontentstudio\security\JwtAuthenticationFilter.class
+com\aicontentstudio\workspace\dto\WorkspaceRequest.class
 com\aicontentstudio\auth\dto\LoginRequest.class
+com\aicontentstudio\workspace\service\WorkspaceService.class
+com\aicontentstudio\workspace\controller\WorkspaceController.class
 com\aicontentstudio\auth\dto\RegisterRequest$RegisterRequestBuilder.class
+com\aicontentstudio\workspace\service\WorkspaceServiceImpl.class
 com\aicontentstudio\exception\GlobalExceptionHandler.class
 com\aicontentstudio\security\CustomUserDetailsService.class
 com\aicontentstudio\security\SecurityConfig.class
@@ -22,4 +27,6 @@ com\aicontentstudio\config\CorsConfig.class
 com\aicontentstudio\exception\GlobalExceptionHandler$ErrorResponse.class
 com\aicontentstudio\auth\dto\LoginRequest$LoginRequestBuilder.class
 com\aicontentstudio\security\JwtService.class
+com\aicontentstudio\workspace\dto\WorkspaceResponse.class
 com\aicontentstudio\user\enums\Role.class
+com\aicontentstudio\workspace\entity\Workspace.class
