@@ -1,0 +1,23 @@
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Java / Maven / Backend
+backend/target/
+backend/.mvn/
+backend/*.jar
+backend/*.war
+backend/.env
+
+# IDE / System
+.idea/
+.vscode/
+*.iml
+*.log
+.DS_Store
+Thumbs.db
