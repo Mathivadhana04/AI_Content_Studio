@@ -45,6 +45,27 @@ const TONES = [
   { value: 'SIMPLIFIED', label: 'Simplified' },
 ];
 
+// Safety converter: transform Markdown headings/bold into styled HTML in case AI outputs Markdown
+const renderContent = (raw) => {
+  if (!raw) return '';
+  return raw
+    // Strip **Meta Description:** lines entirely (hidden)
+    .replace(/^\*{1,2}Meta Description:\*{1,2}.*$/gim, '<!-- meta removed -->')
+    // Convert Markdown headings to styled HTML
+    .replace(/^######\s+(.*)$/gim, '<h6>$1</h6>')
+    .replace(/^#####\s+(.*)$/gim, '<h5>$1</h5>')
+    .replace(/^####\s+(.*)$/gim, '<h4>$1</h4>')
+    .replace(/^###\s+(.*)$/gim, '<h3 style="color: #10b981; margin-top: 16px;">$1</h3>')
+    .replace(/^##\s+(.*)$/gim, '<h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">$1</h2>')
+    .replace(/^#\s+(.*)$/gim, '<h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">$1</h1>')
+    // Convert **bold** to <strong>
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Convert *italic* to <em>
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Preserve line breaks
+    .replace(/\n/g, '<br/>');
+};
+
 const BlogEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -399,7 +420,7 @@ const BlogEditor = () => {
                     '& li': { marginBottom: '6px' },
                     '& blockquote': { borderLeft: '3px solid #8b5cf6', paddingLeft: '16px', color: '#a8a3c4', fontStyle: 'italic' },
                   }}
-                  dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br/>') }}
+                  dangerouslySetInnerHTML={{ __html: renderContent(content) }}
                 />
               ) : (
                 /* Raw Markdown/HTML Editor textarea */

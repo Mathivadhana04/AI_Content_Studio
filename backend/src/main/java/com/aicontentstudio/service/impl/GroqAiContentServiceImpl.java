@@ -82,41 +82,44 @@ public class GroqAiContentServiceImpl implements AiContentService {
     @Override
     public String generateBlog(String topic, String audience, AiTone tone, String keywords, int targetWordCount) {
         String systemPrompt = """
-            You are an expert SEO content writer. Generate comprehensive, well-structured blog posts.
-            Rules:
-            1. The H1 title MUST be short, minimal, and keyword-focused — maximum 4-5 words. Do NOT write the title as a full sentence. Keep it punchy like: "Managing Youth Stress" or "Youth Mental Health".
-            2. The meta description (150-160 chars) must be hidden inside an HTML comment: <!-- META: [your meta description here] -->. Do NOT display it as visible text in the article.
-            3. Do NOT include any FAQ or Frequently Asked Questions section.
-            4. Format H1, H2, H3 headings using HTML inline styles:
-               - H1: <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[Short Title]</h1>
-               - H2: <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Heading]</h2>
-               - H3: <h3 style="color: #10b981; margin-top: 16px;">[Subheading]</h3>
-            5. Make the article engaging, informative, and SEO-optimized.
+            You are an expert SEO content writer outputting blog content as HTML.
+            CRITICAL RULES — you MUST follow ALL of these:
+            1. NEVER use Markdown. Do NOT use # or ## or ### for headings. Do NOT use **text** for bold meta.
+            2. ALL headings MUST be written as HTML tags with inline styles, exactly as shown:
+               H1: <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">3-4 Word Title</h1>
+               H2: <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Section Heading</h2>
+               H3: <h3 style="color: #10b981; margin-top: 16px;">Sub-heading</h3>
+            3. The H1 title must be SHORT — maximum 4 words, keyword-focused. NOT a sentence.
+               CORRECT: Youth Stress Guide | WRONG: Understanding and Managing Stress in Youth
+            4. The meta description MUST be placed as: <!-- META: your 150-160 char description -->
+               It must NOT appear as visible text like **Meta Description:** anywhere.
+            5. Do NOT include any FAQ or Frequently Asked Questions section.
+            6. Write body paragraphs as plain text (no Markdown symbols).
             """;
 
         String userPrompt = String.format("""
-            Write a %s-word SEO blog post about: %s
-            Target audience: %s
-            Tone: %s
-            Keywords to include naturally: %s
+            Write a %s-word blog post about: %s
+            Target audience: %s | Tone: %s | Keywords: %s
             
-            Structure (follow exactly):
-            <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[Short 2-4 word keyword title — NOT a full sentence]</h1>
-            <!-- META: [Write a 150-160 character meta description here] -->
+            Output ONLY HTML. No Markdown whatsoever. Follow this exact structure:
+            
+            <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">Youth Stress Guide</h1>
+            <!-- META: 150-160 character meta description about the topic -->
             
             <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Introduction</h2>
-            [Engaging intro paragraph]
+            <p>Introductory paragraph here...</p>
             
-            <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Main Section 1]</h2>
-            [Content...]
+            <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Section Title Here</h2>
+            <p>Content paragraph...</p>
+            <h3 style="color: #10b981; margin-top: 16px;">Sub-topic if needed</h3>
+            <p>More content...</p>
             
-            <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Main Section 2]</h2>
-            [Content...]
-            
-            [Add 3-5 more relevant sections with H2/H3 headings]
+            [Continue with 3-5 more H2 sections following the same HTML format]
             
             <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Conclusion</h2>
-            [Summary and call to action]
+            <p>Summary and call to action...</p>
+            
+            REMINDER: Replace the H1 text with a real 3-4 word keyword title specific to the topic. Never use # symbols.
             """, targetWordCount, topic, audience, tone.name().toLowerCase(), keywords);
 
         return complete(systemPrompt, userPrompt);
