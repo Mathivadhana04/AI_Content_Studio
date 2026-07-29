@@ -350,7 +350,7 @@ const BlogEditor = () => {
 
       <Grid container spacing={3}>
         {/* Editor Main Content Panel */}
-        <Grid size={{ xs: 12, lg: 8 }}>
+        <Grid size={{ xs: 12, lg: 9 }}>
           <Card sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
             <TextField
               fullWidth
@@ -400,25 +400,44 @@ const BlogEditor = () => {
                 <Box
                   sx={{
                     width: '100%',
-                    minHeight: 480,
+                    minHeight: 600,
                     background: '#0b0b0b',
                     border: '1px solid rgba(139, 92, 246, 0.22)',
                     borderRadius: '10px',
-                    padding: '24px',
+                    padding: { xs: '24px 20px', md: '40px 64px' },
                     boxSizing: 'border-box',
                     overflowY: 'auto',
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: '1rem',
-                    lineHeight: 1.8,
+                    fontSize: '0.97rem',
+                    lineHeight: 1.9,
                     color: '#e2e0f0',
-                    '& h1': { color: '#a78bfa', borderBottom: '2px solid #8b5cf6', paddingBottom: '8px', marginBottom: '16px' },
-                    '& h2': { color: '#ec4899', borderLeft: '4px solid #8b5cf6', paddingLeft: '8px', marginTop: '24px', marginBottom: '12px' },
-                    '& h3': { color: '#10b981', marginTop: '16px', marginBottom: '8px' },
+                    // Essay-style centered content column
+                    '& > *': { maxWidth: '780px', marginLeft: 'auto', marginRight: 'auto', display: 'block' },
+                    '& h1': {
+                      color: '#a78bfa',
+                      borderBottom: '2px solid #8b5cf6',
+                      paddingBottom: '8px',
+                      marginBottom: '20px',
+                      fontSize: '1.55rem',
+                      fontWeight: 700,
+                      lineHeight: 1.3,
+                      fontFamily: "'Sora', sans-serif",
+                    },
+                    '& h2': {
+                      color: '#ec4899',
+                      borderLeft: '4px solid #8b5cf6',
+                      paddingLeft: '12px',
+                      marginTop: '32px',
+                      marginBottom: '12px',
+                      fontSize: '1.1rem',
+                      fontWeight: 700,
+                    },
+                    '& h3': { color: '#10b981', marginTop: '20px', marginBottom: '8px', fontSize: '1rem', fontWeight: 600 },
                     '& strong': { color: '#f0eeff', fontWeight: 700 },
-                    '& p': { marginBottom: '12px' },
+                    '& p': { marginBottom: '14px', textAlign: 'justify' },
                     '& ul, & ol': { paddingLeft: '24px', marginBottom: '12px' },
                     '& li': { marginBottom: '6px' },
-                    '& blockquote': { borderLeft: '3px solid #8b5cf6', paddingLeft: '16px', color: '#a8a3c4', fontStyle: 'italic' },
+                    '& blockquote': { borderLeft: '3px solid #8b5cf6', paddingLeft: '16px', color: '#a8a3c4', fontStyle: 'italic', margin: '16px 0' },
                   }}
                   dangerouslySetInnerHTML={{ __html: renderContent(content) }}
                 />
@@ -454,7 +473,7 @@ const BlogEditor = () => {
         </Grid>
 
         {/* Sidebar Toolkits Panels */}
-        <Grid size={{ xs: 12, lg: 4 }}>
+        <Grid size={{ xs: 12, lg: 3 }}>
           <Card sx={{ p: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Tabs
               value={tabVal}
