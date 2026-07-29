@@ -57,6 +57,8 @@ const BlogEditor = () => {
 
   // Tabs state
   const [tabVal, setTabVal] = useState(0);
+  const [previewMode, setPreviewMode] = useState(false);
+
 
   // AI Sidebar State
   const [selectedText, setSelectedText] = useState('');
@@ -96,9 +98,15 @@ const BlogEditor = () => {
       const res = await blogApi.getById(id);
       setBlog(res.data);
       setTitle(res.data.title);
-      setContent(res.data.content);
+      const loadedContent = res.data.content || '';
+      setContent(loadedContent);
       setMetaDesc(res.data.metaDescription || '');
       setSeoKeyword(res.data.keywords || '');
+      // Auto-preview if content contains styled HTML headings
+      if (loadedContent.includes('<h1') || loadedContent.includes('<h2')) {
+        setPreviewMode(true);
+      }
+
     } catch (err) {
       toast.error('Failed to load article details.');
       navigate('/dashboard');
@@ -340,35 +348,86 @@ const BlogEditor = () => {
               variant="outlined"
             />
 
-            {/* Article Body Editor */}
+            {/* Article Body Editor with Edit/Preview toggle */}
             <Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontWeight: 600 }}>
-                Article Body Content
-              </Typography>
-              <textarea
-                value={content}
-                onChange={handleEditorChange}
-                onSelect={handleEditorSelect}
-                placeholder="Start writing your article content here..."
-                style={{
-                  width: '100%',
-                  minHeight: 480,
-                  background: '#0b0b0b',
-                  color: '#f0eeff',
-                  border: '1px solid rgba(139, 92, 246, 0.22)',
-                  borderRadius: 10,
-                  padding: '16px',
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: '1rem',
-                  lineHeight: 1.8,
-                  resize: 'vertical',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                  transition: 'border-color 0.2s',
-                }}
-                onFocus={(e) => { e.target.style.borderColor = 'rgba(139,92,246,0.55)'; }}
-                onBlur={(e) => { e.target.style.borderColor = 'rgba(139,92,246,0.22)'; }}
-              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
+                  Article Body Content
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button
+                    size="small"
+                    variant={!previewMode ? 'contained' : 'outlined'}
+                    onClick={() => setPreviewMode(false)}
+                    sx={{ minWidth: 80, fontSize: '0.75rem' }}
+                  >
+                    ✏️ Edit
+                  </Button>
+                  <Button
+                    size="small"
+                    variant={previewMode ? 'contained' : 'outlined'}
+                    onClick={() => setPreviewMode(true)}
+                    sx={{ minWidth: 80, fontSize: '0.75rem' }}
+                  >
+                    👁 Preview
+                  </Button>
+                </Box>
+              </Box>
+
+              {previewMode ? (
+                /* Rendered HTML Preview */
+                <Box
+                  sx={{
+                    width: '100%',
+                    minHeight: 480,
+                    background: '#0b0b0b',
+                    border: '1px solid rgba(139, 92, 246, 0.22)',
+                    borderRadius: '10px',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    overflowY: 'auto',
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: '1rem',
+                    lineHeight: 1.8,
+                    color: '#e2e0f0',
+                    '& h1': { color: '#a78bfa', borderBottom: '2px solid #8b5cf6', paddingBottom: '8px', marginBottom: '16px' },
+                    '& h2': { color: '#ec4899', borderLeft: '4px solid #8b5cf6', paddingLeft: '8px', marginTop: '24px', marginBottom: '12px' },
+                    '& h3': { color: '#10b981', marginTop: '16px', marginBottom: '8px' },
+                    '& strong': { color: '#f0eeff', fontWeight: 700 },
+                    '& p': { marginBottom: '12px' },
+                    '& ul, & ol': { paddingLeft: '24px', marginBottom: '12px' },
+                    '& li': { marginBottom: '6px' },
+                    '& blockquote': { borderLeft: '3px solid #8b5cf6', paddingLeft: '16px', color: '#a8a3c4', fontStyle: 'italic' },
+                  }}
+                  dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br/>') }}
+                />
+              ) : (
+                /* Raw Markdown/HTML Editor textarea */
+                <textarea
+                  value={content}
+                  onChange={handleEditorChange}
+                  onSelect={handleEditorSelect}
+                  placeholder="Start writing your article content here..."
+                  style={{
+                    width: '100%',
+                    minHeight: 480,
+                    background: '#0b0b0b',
+                    color: '#f0eeff',
+                    border: '1px solid rgba(139, 92, 246, 0.22)',
+                    borderRadius: 10,
+                    padding: '16px',
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: '1rem',
+                    lineHeight: 1.8,
+                    resize: 'vertical',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    transition: 'border-color 0.2s',
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = 'rgba(139,92,246,0.55)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = 'rgba(139,92,246,0.22)'; }}
+                />
+              )}
             </Box>
           </Card>
         </Grid>
