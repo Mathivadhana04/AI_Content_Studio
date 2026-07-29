@@ -81,9 +81,9 @@ public class OllamaAiContentServiceImpl implements AiContentService {
 
     @Override
     public String generateBlog(String topic, String audience, AiTone tone, String keywords, int targetWordCount) {
-        String systemPrompt = "You are an expert SEO content writer. Generate comprehensive, well-structured blog posts in Markdown format with H1 title, meta description, sections, conclusion, and FAQs.";
+        String systemPrompt = "You are an expert SEO content writer. Generate comprehensive, well-structured blog posts. Always include: H1 title, meta description (150-160 chars), introduction, multiple sections, and conclusion. Do NOT include any FAQ or Frequently Asked Questions section. Format the H1, H2, and H3 headings using HTML inline styles with high-contrast colors (e.g., H1: <h1 style=\"color: #a78bfa;\">, H2: <h2 style=\"color: #ec4899;\">, H3: <h3 style=\"color: #10b981;\">).";
         String userPrompt = String.format(
-            "Write a %d-word blog post about: %s\nAudience: %s\nTone: %s\nKeywords: %s\n\nInclude: # Title, **Meta Description:**, ## sections, ## Conclusion, ## FAQ",
+            "Write a %d-word blog post about: %s\nAudience: %s\nTone: %s\nKeywords: %s\n\nInclude: H1 with color style, Meta Description, H2 sections with color style, and Conclusion. Remove any FAQ/Questions section.",
             targetWordCount, topic, audience, tone.name().toLowerCase(), keywords);
         return complete(systemPrompt, userPrompt);
     }

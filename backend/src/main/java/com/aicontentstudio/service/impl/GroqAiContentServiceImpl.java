@@ -84,8 +84,15 @@ public class GroqAiContentServiceImpl implements AiContentService {
         String systemPrompt = """
             You are an expert SEO content writer. Generate comprehensive, well-structured blog posts.
             Always include: H1 title, meta description (150-160 chars), introduction, 
-            multiple H2/H3 sections with rich content, conclusion, and FAQ section.
-            Format the output in Markdown. Make it engaging, informative, and SEO-optimized.
+            multiple H2/H3 sections with rich content, and a conclusion.
+            Do NOT include any FAQ or Frequently Asked Questions section.
+            Format the H1, H2, and H3 headings using HTML inline styles to display as highly contrastive colored block letters. 
+            Example styling:
+            - H1: <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[Title]</h1>
+            - H2: <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Heading]</h2>
+            - H3: <h3 style="color: #10b981; margin-top: 16px;">[Subheading]</h3>
+            
+            Format the output in Markdown (using these HTML tags for headers). Make it engaging, informative, and SEO-optimized.
             """;
 
         String userPrompt = String.format("""
@@ -95,28 +102,22 @@ public class GroqAiContentServiceImpl implements AiContentService {
             Keywords to include naturally: %s
             
             Structure:
-            # [SEO Title]
+            <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[SEO Title]</h1>
             **Meta Description:** [150-160 character description]
             
-            ## Introduction
+            <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Introduction</h2>
             [Engaging intro paragraph]
             
-            ## [Main Section 1]
+            <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Main Section 1]</h2>
             [Content...]
             
-            ## [Main Section 2]
+            <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Main Section 2]</h2>
             [Content...]
             
             [Add 3-5 more relevant sections]
             
-            ## Conclusion
+            <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Conclusion</h2>
             [Summary and CTA]
-            
-            ## Frequently Asked Questions
-            **Q: [Question 1]**
-            A: [Answer 1]
-            
-            [Add 3-5 FAQs]
             """, targetWordCount, topic, audience, tone.name().toLowerCase(), keywords);
 
         return complete(systemPrompt, userPrompt);
