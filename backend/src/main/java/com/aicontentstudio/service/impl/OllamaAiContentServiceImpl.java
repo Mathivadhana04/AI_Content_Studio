@@ -81,9 +81,18 @@ public class OllamaAiContentServiceImpl implements AiContentService {
 
     @Override
     public String generateBlog(String topic, String audience, AiTone tone, String keywords, int targetWordCount) {
-        String systemPrompt = "You are an expert SEO content writer. Generate comprehensive, well-structured blog posts. Always include: H1 title, meta description (150-160 chars), introduction, multiple sections, and conclusion. Do NOT include any FAQ or Frequently Asked Questions section. Format the H1, H2, and H3 headings using HTML inline styles with high-contrast colors (e.g., H1: <h1 style=\"color: #a78bfa;\">, H2: <h2 style=\"color: #ec4899;\">, H3: <h3 style=\"color: #10b981;\">).";
+        String systemPrompt = "You are an expert SEO content writer. Rules: " +
+            "1. The H1 title MUST be short, minimal, keyword-focused — maximum 4 words. NOT a full sentence. Example: 'Youth Stress Guide' or 'Managing Stress Today'. " +
+            "2. The meta description (150-160 chars) must be placed as an HTML comment: <!-- META: your description --> and NOT shown as visible text. " +
+            "3. Do NOT include any FAQ or Questions section. " +
+            "4. Use HTML inline-styled headings: H1=<h1 style=\"color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;\">, " +
+            "H2=<h2 style=\"color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;\">, " +
+            "H3=<h3 style=\"color: #10b981; margin-top: 16px;\">.";
         String userPrompt = String.format(
-            "Write a %d-word blog post about: %s\nAudience: %s\nTone: %s\nKeywords: %s\n\nInclude: H1 with color style, Meta Description, H2 sections with color style, and Conclusion. Remove any FAQ/Questions section.",
+            "Write a %d-word blog post about: %s\nAudience: %s\nTone: %s\nKeywords: %s\n\n" +
+            "Structure:\n<h1 style=\"color: #a78bfa;\">[2-4 word keyword title — not a sentence]</h1>\n" +
+            "<!-- META: [150-160 char meta description] -->\n" +
+            "<h2>Introduction</h2>[intro]\n[3-5 H2 sections with H3 sub-sections]\n<h2>Conclusion</h2>[summary]. No FAQ section.",
             targetWordCount, topic, audience, tone.name().toLowerCase(), keywords);
         return complete(systemPrompt, userPrompt);
     }

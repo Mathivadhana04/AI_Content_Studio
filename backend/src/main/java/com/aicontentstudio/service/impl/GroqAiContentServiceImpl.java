@@ -83,16 +83,15 @@ public class GroqAiContentServiceImpl implements AiContentService {
     public String generateBlog(String topic, String audience, AiTone tone, String keywords, int targetWordCount) {
         String systemPrompt = """
             You are an expert SEO content writer. Generate comprehensive, well-structured blog posts.
-            Always include: H1 title, meta description (150-160 chars), introduction, 
-            multiple H2/H3 sections with rich content, and a conclusion.
-            Do NOT include any FAQ or Frequently Asked Questions section.
-            Format the H1, H2, and H3 headings using HTML inline styles to display as highly contrastive colored block letters. 
-            Example styling:
-            - H1: <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[Title]</h1>
-            - H2: <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Heading]</h2>
-            - H3: <h3 style="color: #10b981; margin-top: 16px;">[Subheading]</h3>
-            
-            Format the output in Markdown (using these HTML tags for headers). Make it engaging, informative, and SEO-optimized.
+            Rules:
+            1. The H1 title MUST be short, minimal, and keyword-focused — maximum 4-5 words. Do NOT write the title as a full sentence. Keep it punchy like: "Managing Youth Stress" or "Youth Mental Health".
+            2. The meta description (150-160 chars) must be hidden inside an HTML comment: <!-- META: [your meta description here] -->. Do NOT display it as visible text in the article.
+            3. Do NOT include any FAQ or Frequently Asked Questions section.
+            4. Format H1, H2, H3 headings using HTML inline styles:
+               - H1: <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[Short Title]</h1>
+               - H2: <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Heading]</h2>
+               - H3: <h3 style="color: #10b981; margin-top: 16px;">[Subheading]</h3>
+            5. Make the article engaging, informative, and SEO-optimized.
             """;
 
         String userPrompt = String.format("""
@@ -101,9 +100,9 @@ public class GroqAiContentServiceImpl implements AiContentService {
             Tone: %s
             Keywords to include naturally: %s
             
-            Structure:
-            <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[SEO Title]</h1>
-            **Meta Description:** [150-160 character description]
+            Structure (follow exactly):
+            <h1 style="color: #a78bfa; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">[Short 2-4 word keyword title — NOT a full sentence]</h1>
+            <!-- META: [Write a 150-160 character meta description here] -->
             
             <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Introduction</h2>
             [Engaging intro paragraph]
@@ -114,10 +113,10 @@ public class GroqAiContentServiceImpl implements AiContentService {
             <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">[Main Section 2]</h2>
             [Content...]
             
-            [Add 3-5 more relevant sections]
+            [Add 3-5 more relevant sections with H2/H3 headings]
             
             <h2 style="color: #ec4899; border-left: 4px solid #8b5cf6; padding-left: 8px; margin-top: 24px;">Conclusion</h2>
-            [Summary and CTA]
+            [Summary and call to action]
             """, targetWordCount, topic, audience, tone.name().toLowerCase(), keywords);
 
         return complete(systemPrompt, userPrompt);
