@@ -364,8 +364,17 @@ public class BlogServiceImpl implements BlogService {
     }
 
     private String extractTitle(String content, String fallback) {
-        String[] lines = content.split("\n");
-        for (String line : lines) {
+        // Handle HTML <h1 ...>Title</h1> — strip all tags, return only inner text
+        java.util.regex.Pattern h1Html = java.util.regex.Pattern.compile(
+            "<h1[^>]*>(.*?)</h1>", java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+        java.util.regex.Matcher h1Matcher = h1Html.matcher(content);
+        if (h1Matcher.find()) {
+            // Strip any nested HTML tags inside the h1
+            String raw = h1Matcher.group(1).replaceAll("<[^>]+>", "").trim();
+            if (!raw.isEmpty()) return raw;
+        }
+        // Handle Markdown # Title
+        for (String line : content.split("\n")) {
             String trimmed = line.trim();
             if (trimmed.startsWith("# ")) {
                 return trimmed.substring(2).trim();
@@ -375,23 +384,32 @@ public class BlogServiceImpl implements BlogService {
     }
 
     private String extractMetaDescription(String content) {
+        // Handle HTML comment format: <!-- META: description -->
+        java.util.regex.Pattern metaComment = java.util.regex.Pattern.compile(
+            "<!--\\s*META:\\s*(.*?)\\s*-->", java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
+        java.util.regex.Matcher metaMatcher = metaComment.matcher(content);
+        if (metaMatcher.find()) {
+            String desc = metaMatcher.group(1).trim();
+            if (!desc.isEmpty()) return desc.substring(0, Math.min(desc.length(), 160));
+        }
+        // Handle legacy bold Markdown format: **Meta Description:** text
         if (content.contains("**Meta Description:**")) {
             int start = content.indexOf("**Meta Description:**") + "**Meta Description:**".length();
             int end = content.indexOf("\n", start);
             if (end == -1) end = Math.min(start + 200, content.length());
             return content.substring(start, end).trim();
         }
-        // Fallback: take first meaningful paragraph
-        String[] lines = content.split("\n");
-        for (String line : lines) {
-            String trimmed = line.trim();
+        // Fallback: first meaningful plain paragraph (strip HTML tags)
+        for (String line : content.split("\n")) {
+            String trimmed = line.trim().replaceAll("<[^>]+>", "").trim();
             if (!trimmed.isEmpty() && !trimmed.startsWith("#") && !trimmed.startsWith("*")
-                    && trimmed.length() > 50) {
+                    && !trimmed.startsWith("<!--") && trimmed.length() > 50) {
                 return trimmed.substring(0, Math.min(trimmed.length(), 160));
             }
         }
         return "";
     }
+
 
     private int countWords(String text) {
         if (text == null || text.isBlank()) return 0;
