@@ -65,10 +65,23 @@ const renderContent = (raw) => {
     // Preserve line breaks
     .replace(/\n/g, '<br/>');
 };
+// Strip raw HTML tags from a string — used to clean titles stored with <h1> markup
+const stripHtml = (str) => {
+  if (!str) return '';
+  return str
+    .replace(/<[^>]+>/g, '')   // remove all HTML tags
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .trim();
+};
+
 
 const BlogEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
 
   const [blog, setBlog] = useState(null);
   const [content, setContent] = useState('');
@@ -118,7 +131,7 @@ const BlogEditor = () => {
     try {
       const res = await blogApi.getById(id);
       setBlog(res.data);
-      setTitle(res.data.title);
+      setTitle(stripHtml(res.data.title));  // strip any raw HTML tags saved in old blogs
       const loadedContent = res.data.content || '';
       setContent(loadedContent);
       setMetaDesc(res.data.metaDescription || '');
